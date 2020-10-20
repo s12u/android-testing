@@ -19,8 +19,8 @@ class DefaultTasksRepositoryTest {
     private val localTasks = listOf(task3).sortedBy { it.id }
     private val newTasks = listOf(task3).sortedBy { it.id }
 
-    private lateinit var tasksRemoteDataSource: FakeDataSource
-    private lateinit var tasksLocalDataSource: FakeDataSource
+    lateinit var tasksRemoteDataSource: FakeDataSource
+    lateinit var tasksLocalDataSource: FakeDataSource
 
     // Class under test
     private lateinit var tasksRepository: DefaultTasksRepository

@@ -14,7 +14,7 @@ import java.util.LinkedHashMap
 
 
 
-class FakeAndroidTestRepository : TasksRepository {
+class FakeAndroidTasksRepository : TasksRepository {
 
     var tasksServiceData: LinkedHashMap<String, Task> = LinkedHashMap()
 
@@ -27,7 +27,7 @@ class FakeAndroidTestRepository : TasksRepository {
     }
 
     override suspend fun refreshTasks() {
-        observableTasks.value = getTasks()
+        observableTasks.postValue(getTasks())
     }
 
     override suspend fun refreshTask(taskId: String) {

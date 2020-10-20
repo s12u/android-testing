@@ -7,35 +7,42 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.example.android.architecture.blueprints.todoapp.R
-import com.example.android.architecture.blueprints.todoapp.ServiceLocator
-import com.example.android.architecture.blueprints.todoapp.data.FakeAndroidTestRepository
+import com.example.android.architecture.blueprints.todoapp.data.FakeAndroidTasksRepository
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
+import com.example.android.architecture.blueprints.todoapp.launchFragmentInHiltContainer
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.Matchers.not
 import org.junit.After
-import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
 
+@HiltAndroidTest
 @ExperimentalCoroutinesApi
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 class TaskDetailFragmentTest {
 
-    private lateinit var repository: TasksRepository
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    lateinit var repository: TasksRepository
 
     @Before
     fun initRepository() {
-        repository = FakeAndroidTestRepository()
-        ServiceLocator.tasksRepository = repository
+        repository = FakeAndroidTasksRepository()
+//        ServiceLocator.tasksRepository = repository
     }
 
     @After
     fun cleanupDb() = runBlockingTest {
-        ServiceLocator.resetRepository()
+        repository.deleteAllTasks()
     }
 
     @Test
@@ -46,7 +53,7 @@ class TaskDetailFragmentTest {
 
         // WHEN - Details fragment launched to display task
         val bundle = TaskDetailFragmentArgs(activeTask.id).toBundle()
-        launchFragmentInContainer<TaskDetailFragment>(bundle, R.style.AppTheme)
+        launchFragmentInHiltContainer<TaskDetailFragment>(bundle, R.style.AppTheme)
 
         // THEN - Task details are displayed on the screen
         // make sure that the title/description are both shown and correct

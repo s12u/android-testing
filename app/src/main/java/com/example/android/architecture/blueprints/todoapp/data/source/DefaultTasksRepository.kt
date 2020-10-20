@@ -19,6 +19,7 @@ import androidx.lifecycle.LiveData
 import com.example.android.architecture.blueprints.todoapp.data.Result
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
+import com.example.android.architecture.blueprints.todoapp.di.IoDispatcher
 import com.example.android.architecture.blueprints.todoapp.di.LocalDataSource
 import com.example.android.architecture.blueprints.todoapp.di.RemoteDataSource
 import kotlinx.coroutines.*
@@ -31,10 +32,9 @@ import javax.inject.Singleton
 @Singleton
 class DefaultTasksRepository @Inject constructor(
         @RemoteDataSource private val tasksRemoteDataSource: TasksDataSource,
-        @LocalDataSource private val tasksLocalDataSource: TasksDataSource
+        @LocalDataSource private val tasksLocalDataSource: TasksDataSource,
+        @IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : TasksRepository {
-
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     override suspend fun getTasks(forceUpdate: Boolean): Result<List<Task>> {
         if (forceUpdate) {

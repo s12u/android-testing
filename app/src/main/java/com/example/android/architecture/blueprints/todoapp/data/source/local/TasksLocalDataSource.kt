@@ -22,8 +22,8 @@ import com.example.android.architecture.blueprints.todoapp.data.Result.Error
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksDataSource
+import com.example.android.architecture.blueprints.todoapp.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,11 +33,9 @@ import javax.inject.Singleton
  */
 @Singleton
 class TasksLocalDataSource @Inject internal constructor(
-        private val tasksDao: TasksDao
+        private val tasksDao: TasksDao,
+        @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : TasksDataSource {
-
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-
     override fun observeTasks(): LiveData<Result<List<Task>>> {
         return tasksDao.observeTasks().map {
             Success(it)
