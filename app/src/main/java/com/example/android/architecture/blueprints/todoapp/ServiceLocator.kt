@@ -27,7 +27,7 @@ object ServiceLocator {
     }
 
     private fun createTasksRepository(context: Context): TasksRepository {
-        val newRepo = DefaultTasksRepository(TasksRemoteDataSource, createTaskLocalDataSource(context))
+        val newRepo = DefaultTasksRepository(TasksRemoteDataSource(), createTaskLocalDataSource(context))
         tasksRepository = newRepo
         return newRepo
     }
@@ -36,7 +36,7 @@ object ServiceLocator {
     fun resetRepository() {
         synchronized(lock) {
             runBlocking {
-                TasksRemoteDataSource.deleteAllTasks()
+                TasksRemoteDataSource().deleteAllTasks()
             }
             // Clear all data to avoid test pollution.
             database?.apply {

@@ -16,21 +16,24 @@
 
 package com.example.android.architecture.blueprints.todoapp.addedittask
 
-import android.app.Application
-import androidx.lifecycle.*
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.android.architecture.blueprints.todoapp.Event
 import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
-import com.example.android.architecture.blueprints.todoapp.data.source.DefaultTasksRepository
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
-import com.example.android.architecture.blueprints.todoapp.tasks.TasksViewModel
 import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the Add/Edit screen.
  */
-class AddEditTaskViewModel(val tasksRepository: TasksRepository) : ViewModel() {
+class AddEditTaskViewModel @ViewModelInject constructor(
+        private val tasksRepository: TasksRepository
+) : ViewModel() {
 
     // Note, for testing and architecture purposes, it's bad practice to construct the repository
     // here. We'll show you how to fix this during the codelab
@@ -138,12 +141,4 @@ class AddEditTaskViewModel(val tasksRepository: TasksRepository) : ViewModel() {
             _taskUpdatedEvent.value = Event(Unit)
         }
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class AddEditTaskViewModelFactory (
-        private val tasksRepository: TasksRepository
-) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel> create(modelClass: Class<T>) =
-            (AddEditTaskViewModel(tasksRepository) as T)
 }

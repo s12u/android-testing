@@ -25,14 +25,18 @@ import com.example.android.architecture.blueprints.todoapp.data.source.TasksData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Concrete implementation of a data source as a db.
  */
-class TasksLocalDataSource internal constructor(
-    private val tasksDao: TasksDao,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+@Singleton
+class TasksLocalDataSource @Inject internal constructor(
+        private val tasksDao: TasksDao
 ) : TasksDataSource {
+
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     override fun observeTasks(): LiveData<Result<List<Task>>> {
         return tasksDao.observeTasks().map {

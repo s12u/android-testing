@@ -15,24 +15,23 @@
  */
 package com.example.android.architecture.blueprints.todoapp.taskdetail
 
-import android.app.Application
 import androidx.annotation.StringRes
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.android.architecture.blueprints.todoapp.Event
 import com.example.android.architecture.blueprints.todoapp.R
-import com.example.android.architecture.blueprints.todoapp.TodoApplication
 import com.example.android.architecture.blueprints.todoapp.data.Result
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
-import com.example.android.architecture.blueprints.todoapp.data.source.DefaultTasksRepository
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
-import com.example.android.architecture.blueprints.todoapp.tasks.TasksViewModel
 import kotlinx.coroutines.launch
 
 /**
  * ViewModel for the Details screen.
  */
-class TaskDetailViewModel(val tasksRepository: TasksRepository) : ViewModel() {
+class TaskDetailViewModel @ViewModelInject constructor(
+        private val tasksRepository: TasksRepository
+) : ViewModel() {
 
     // Note, for testing and architecture purposes, it's bad practice to construct the repository
     // here. We'll show you how to fix this during the codelab
@@ -118,12 +117,4 @@ class TaskDetailViewModel(val tasksRepository: TasksRepository) : ViewModel() {
     private fun showSnackbarMessage(@StringRes message: Int) {
         _snackbarText.value = Event(message)
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class TaskDetailViewModelFactory (
-        private val tasksRepository: TasksRepository
-) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel> create(modelClass: Class<T>) =
-            (TaskDetailViewModel(tasksRepository) as T)
 }

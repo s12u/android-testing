@@ -15,9 +15,9 @@
  */
 package com.example.android.architecture.blueprints.todoapp.tasks
 
-import android.app.Application
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.android.architecture.blueprints.todoapp.Event
 import com.example.android.architecture.blueprints.todoapp.R
@@ -32,7 +32,9 @@ import kotlinx.coroutines.launch
 /**
  * ViewModel for the task list screen.
  */
-class TasksViewModel(private val tasksRepository: TasksRepository) : ViewModel() {
+class TasksViewModel @ViewModelInject constructor(
+        private val tasksRepository: DefaultTasksRepository
+) : ViewModel() {
 
     // Note, for testing and architecture purposes, it's bad practice to construct the repository
     // here. We'll show you how to fix this during the codelab
@@ -230,12 +232,4 @@ class TasksViewModel(private val tasksRepository: TasksRepository) : ViewModel()
     fun refresh() {
         _forceUpdate.value = true
     }
-}
-
-@Suppress("UNCHECKED_CAST")
-class TasksViewModelFactory (
-        private val tasksRepository: TasksRepository
-) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel> create(modelClass: Class<T>) =
-            (TasksViewModel(tasksRepository) as T)
 }
